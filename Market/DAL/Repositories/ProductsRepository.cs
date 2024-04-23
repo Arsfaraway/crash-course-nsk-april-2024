@@ -13,8 +13,48 @@ internal sealed class ProductsRepository
         _context = new RepositoryContext();
     }
 
+    public async Task<DbResult<IReadOnlyCollection<Product>>> SearchModel(string? productName,
+        SortType? sortType,
+        ProductCategory? category,
+        bool ascending = true,
+        int skip = 0,
+        int take = 50)
+    {
+        IQueryable<Product> query = _context.Products;
+
+        if (!string.IsNullOrEmpty(productName))
+        {
+            query = query.Where(p => p.Name.Contains(productName, StringComparison.OrdinalIgnoreCase));
+        }
+
+        if (category.HasValue)
+        {
+            query = query.Where(p => p.Category == category.Value);
+        }
+
+        switch (sortType)
+        {
+            case SortType.Name:
+                query = ascending
+                    ? query.OrderBy(p => p.Name)
+                    : query.OrderByDescending(p => p.Name);
+                break;
+            case SortType.Price:
+                query = ascending
+                    ? query.OrderBy(p => p.PriceInRubles)
+                    : query.OrderByDescending(p => p.PriceInRubles);
+                break;
+            default:
+                break;
+        }
+
+        var products = await query.Skip(skip).Take(take).ToListAsync();
+
+        return new DbResult<IReadOnlyCollection<Product>>(products, DbResultStatus.Ok);
+    }
+
     public async Task<DbResult<IReadOnlyCollection<Product>>> GetProductsAsync(
-        Guid? sellerId = null, 
+        Guid? sellerId = null,
         int skip = 0,
         int take = 50)
     {
@@ -61,13 +101,13 @@ internal sealed class ProductsRepository
         if (productToUpdate is null)
             return new DbResult(DbResultStatus.NotFound);
 
-        if(updateInfo.Name != null)
+        if (updateInfo.Name != null)
             productToUpdate.Name = updateInfo.Name;
-        if(updateInfo.Description != null)
+        if (updateInfo.Description != null)
             productToUpdate.Description = updateInfo.Description;
-        if(updateInfo.Category.HasValue)
+        if (updateInfo.Category.HasValue)
             productToUpdate.Category = updateInfo.Category.Value;
-        if(updateInfo.PriceInRubles.HasValue)
+        if (updateInfo.PriceInRubles.HasValue)
             productToUpdate.PriceInRubles = updateInfo.PriceInRubles.Value;
 
         try

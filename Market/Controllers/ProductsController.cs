@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Market.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("/v1/products")]
 public sealed class ProductsController : ControllerBase
 {
     public ProductsController()
@@ -18,7 +18,7 @@ public sealed class ProductsController : ControllerBase
 
     private ProductsRepository ProductsRepository { get; }
 
-    [HttpGet("GetProductById")]
+    [HttpGet("{productId:guid}")]
     public async Task<IActionResult> GetProductByIdAsync(Guid productId)
     {
         var productResult = await ProductsRepository.GetProductAsync(productId);
@@ -27,7 +27,8 @@ public sealed class ProductsController : ControllerBase
             : error;
     }
 
-    [HttpPost("SearchProducts")]
+
+    [HttpPost("search")]
     public async Task<IActionResult> SearchProductsAsync(
         string? productName,
         SortType? sortType,
@@ -36,10 +37,17 @@ public sealed class ProductsController : ControllerBase
         int skip = 0,
         int take = 50)
     {
-        throw new NotImplementedException("Нужно реализовать позже");
+        var productsResult =
+            await ProductsRepository.SearchModel(productName, sortType, category, ascending, skip, take);
+        if (!DbResultIsSuccessful(productsResult, out var error))
+            return error;
+
+        var productDtos = productsResult.Result.Select(ProductDto.FromModel);
+        return new JsonResult(productDtos);
     }
 
-    [HttpPost("GetProductsForSeller")]
+
+    [HttpGet()]
     public async Task<IActionResult> GetSellerProductsAsync(
         [FromQuery] Guid sellerId,
         [FromQuery] int skip = 0,
@@ -53,7 +61,7 @@ public sealed class ProductsController : ControllerBase
         return new JsonResult(productDtos);
     }
 
-    [HttpPost("CreateProduct")]
+    [HttpPost]
     public async Task<IActionResult> CreateProductAsync([FromBody] Product product)
     {
         var createResult = await ProductsRepository.CreateProductAsync(product);
@@ -63,8 +71,9 @@ public sealed class ProductsController : ControllerBase
             : error;
     }
 
-    [HttpPost("UpdateProductById")]
-    public async Task<IActionResult> UpdateProductAsync([FromRoute] Guid productId, [FromBody] UpdateProductRequestDto requestInfo)
+    [HttpPut("{productId:guid}")]
+    public async Task<IActionResult> UpdateProductAsync([FromRoute] Guid productId,
+        [FromBody] UpdateProductRequestDto requestInfo)
     {
         var updateResult = await ProductsRepository.UpdateProductAsync(productId, new ProductUpdateInfo
         {
@@ -79,7 +88,7 @@ public sealed class ProductsController : ControllerBase
             : error;
     }
 
-    [HttpPost("DeleteProductById")]
+    [HttpDelete("{productId}")]
     public async Task<IActionResult> DeleteProductAsync(Guid productId)
     {
         var deleteResult = await ProductsRepository.DeleteProductAsync(productId);
