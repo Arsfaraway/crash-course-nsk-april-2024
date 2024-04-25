@@ -1,0 +1,10 @@
+﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=3cd3f8c4_002De6e6_002D4ca3_002D8e78_002Dec01e3bb1eaf/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Test1" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::7EE9BDA4-D50A-40EA-B9AE-8FA2A2733C2D::net8.0::MarketTests.ValidatorsTest.ProductDtoValidatorTest&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::7EE9BDA4-D50A-40EA-B9AE-8FA2A2733C2D::net8.0::MarketTests.ValidatorsTest.SearchProductRequestDtoValidator.EmptyProductDtoShouldPass&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::7EE9BDA4-D50A-40EA-B9AE-8FA2A2733C2D::net8.0::MarketTests.ValidatorsTest.SearchProductRequestDtoValidator.NameLengthProductDtoShouldFail&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::7EE9BDA4-D50A-40EA-B9AE-8FA2A2733C2D::net8.0::MarketTests.ValidatorsTest.SearchProductRequestDtoValidator.NameLengthProductDtoShouldPass&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::7EE9BDA4-D50A-40EA-B9AE-8FA2A2733C2D::net8.0::MarketTests.ValidatorsTest.SearchProductRequestDtoValidator&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>
